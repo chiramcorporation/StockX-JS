@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>CSV Reader/Writter</title>
+  <link rel="stylesheet" href="css/stockX.css">
+</head>
+
+<body>
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <section id="headerSection" class="header-section">
+            <h1>Chiram</h1>
+          </section>
+          <section id="leftSection" class="left-section"></section>
+        </div>
+        <div class="col-12">
+          <section id="mainSection" class="main-section">
+            <!-- Holdings File/Data Section -->
+            <h3 class="inline-link">
+              Choose a file to upload the Holdings data CSV.
+              <p>
+                <a href="javascript:downloadHoldingsTemplate()">Download </a>
+                the Sample Template for Holdings
+              </p>
+            </h3>
+            <span class="inline-tab-space"></span>
+            <form id="holdingsForm">
+              <input type="file" id="holdingsUploadFile" accept=".csv" />
+              <input type="submit" value="Submit" class="button button2" />
+              <div id="holdingsFileUploadMessage" class="success-message-box" hidden></div>
+            </form>
+            <!-- Trade File/Data Section -->
+            <h3 class="inline-link">
+              Choose a file to upload the expense/trade data CSV.
+              <p style="margin: 0.25rem 0;">
+                <a href="javascript:downloadTradeTemplate()">Download </a>
+                the Sample Template for Trade Data
+              </p>
+            </h3>
+            <span class="inline-tab-space"></span>            
+            <form id="myForm">
+              <input type="file" id="csvFile" accept=".csv" />
+              <input type="submit" value="Submit" class="button button2" />
+              <div id="tradeDataFileUploadMessage" class="success-message-box" hidden></div>
+            </form>
+            <form>
+              <h3 class="inline-link">Click the below button to process TradeData and generate new Holdings</h3>
+                <p style="margin: 0.25rem 0;">Make sure that you have uploaded the Holdings data and Trade data first and then click the below
+                  button.
+                  Make sure to not process same Trade Data twice which could lead to invalid Holdings.</p>
+                <input type="button" value="Process" class="button button2" onclick="processData();" />
+                <div id="processingFilesMessage" class="success-message-box" hidden></div>
+            </form>
+          </section>
+        </div>
+
+        <!-- <div style="clear:both"></div> -->
+        <!-- Final Display Section -->
+        <div class="col-12">
+          <section class="main-section">
+            <h3 class="inline-link">Final Holdings after processing:</h3>
+            <input id="finalDownloadButton" type="button" value="Download" class="button" onclick="downloadFinalData();"
+              hidden />
+            <div id="displaySection">No Records to Display</div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="js/stockX.js"></script>
+</body>
+
+</html>
