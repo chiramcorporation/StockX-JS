@@ -3,19 +3,81 @@ const holdingsForm = document.getElementById("holdingsForm");
 const csvFile = document.getElementById("csvFile");
 const displaySection = document.getElementById("displaySection");
 const holdingsFileMessageEelement = document.getElementById("holdingsFileUploadMessage");
+// const holdingsCacheMessageEelement = document.getElementById("holdingsCacheLoadMessage");
 const tradeDataFileUploadMessageEelement = document.getElementById("tradeDataFileUploadMessage");
 const processingFilesMessageElement = document.getElementById("processingFilesMessage");
 const finalDownloadButtonEelement = document.getElementById("finalDownloadButton");
+
+const STORAGE_CONST = {
+  HOLDINGS_LABEL: 'stockx_js_stock_holdings',
+  TRADES_LABEL: 'stockx_js_trade_data'
+};
 
 
 let tradeFileUploaded = false;
 let holdingsFileUploaded = false;
 
-let tradeDataFileData = [];
+let tradeDataCacheData = [];
+let newTradeDataRecords = [];
+let tradeDataKeys = [];
 let holdingsFileData = [];
 let holdingsMap = {};
 let holdingsAltMap = {};
 let processedHoldingsData = [];
+
+/**
+ * onLoad of Application, will be called for loading keys from LocalStorage Trade Data
+ */
+function loadTradeDataKeys() {
+// exchange
+// order_id
+// trade_id
+  if (tradeDataCacheData && Array.isArray(tradeDataCacheData)) {
+    tradeDataCacheData.forEach(element => {
+      tradeDataKeys.push('' + element.exchange + element.order_id + element.trade_id + '');
+    });
+    console.log(tradeDataKeys);
+  } else {
+    console.log('No Queue defined');
+  }
+}
+/**
+ * When TradeData file uploaded, will be called for loading new Trades into
+ */
+function insertNewTrades(tempTradeData) {
+  // tradeDataFileData
+  tempTradeData.forEach(tradeRecord => {
+    const tempKey = '' + tradeRecord.exchange + tradeRecord.order_id + tradeRecord.trade_id + '';
+    if (!tradeDataKeys.includes(tempKey)) {
+      newTradeDataRecords.push(tradeRecord);
+      tradeDataKeys.push(tempKey);
+    }
+  });
+  tradeDataFileUploadMessageEelement.innerHTML = "Successfully Uploaded Trade Data File";
+  tradeDataFileUploadMessageEelement.hidden = false;
+  tradeFileUploaded = true;
+  console.log(newTradeDataRecords);
+}
+
+window.onload = function() {
+  console.log('window.onload function called');
+  const holdingsString = localStorage.getItem(STORAGE_CONST.HOLDINGS_LABEL);
+  if (holdingsString && holdingsString.length > 0) {
+    processedHoldingsData = JSON.parse(holdingsString);
+    displayProcessedHoldingsData();
+    holdingsFileMessageEelement.innerHTML = "Successfully loaded Holdings From Cache, if there is any descrepancy upload a new file and overwrite the records";
+    holdingsFileMessageEelement.hidden = false;
+    finalDownloadButtonEelement.hidden = false;
+    holdingsFileUploaded = true;
+  }
+
+  const tradeDataString = localStorage.getItem(STORAGE_CONST.TRADES_LABEL);
+  if (tradeDataString && tradeDataString.length > 0) {
+    tradeDataCacheData = JSON.parse(tradeDataString);
+    loadTradeDataKeys();
+  }
+};
+
 
 function csvToArray(str, delimiter = ",") {
 
@@ -95,10 +157,8 @@ myForm.addEventListener("submit", function (e) {
 
   reader.onload = function (e) {
     const text = e.target.result;
-    tradeDataFileData = csvToArray(text);
-    tradeDataFileUploadMessageEelement.innerHTML = "Successfully Uploaded Trade Data File";
-    tradeDataFileUploadMessageEelement.hidden = false;
-    tradeFileUploaded = true;
+    const tempTradeData = csvToArray(text);
+    insertNewTrades(tempTradeData);
   };
 
   reader.readAsText(input);
@@ -140,9 +200,9 @@ function processData() {
     });
   }
 
-  if (tradeDataFileData != null && tradeDataFileData.length > 0) {
+  if (newTradeDataRecords != null && newTradeDataRecords.length > 0) {
     // console.log(JSON.stringify(holdingsMap));
-    tradeDataFileData.forEach(element => {
+    newTradeDataRecords.forEach(element => {
       let holdingRec = holdingsMap[element.symbol];
       if (holdingRec != null && holdingRec != undefined) {
       } else {
@@ -177,11 +237,13 @@ function processData() {
 
     });
     processedHoldingsData = Object.values(holdingsMap);
-    // console.log(JSON.stringify(processedHoldingsData));
+    localStorage.setItem(STORAGE_CONST.HOLDINGS_LABEL, JSON.stringify(processedHoldingsData));
+    localStorage.setItem(STORAGE_CONST.TRADES_LABEL, JSON.stringify(tradeDataCacheData));
     displayProcessedHoldingsData();
     processingFilesMessageElement.innerHTML = "Successfully Processed Holdings and Trade Files";
     processingFilesMessageElement.hidden = false;
     finalDownloadButtonEelement.hidden = false;
+    newTradeDataRecords = [];
   }
 }
 
