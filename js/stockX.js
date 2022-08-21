@@ -36,7 +36,6 @@ function loadTradeDataKeys() {
     tradeDataCacheData.forEach(element => {
       tradeDataKeys.push('' + element.exchange + element.order_id + element.trade_id + '');
     });
-    console.log(tradeDataKeys);
   } else {
     console.log('No Queue defined');
   }
@@ -56,18 +55,22 @@ function insertNewTrades(tempTradeData) {
   tradeDataFileUploadMessageEelement.innerHTML = "Successfully Uploaded Trade Data File";
   tradeDataFileUploadMessageEelement.hidden = false;
   tradeFileUploaded = true;
-  console.log(newTradeDataRecords);
+  // console.log(newTradeDataRecords);
 }
 
 window.onload = function() {
-  console.log('window.onload function called');
+  // console.log('window.onload function called');
   const holdingsString = localStorage.getItem(STORAGE_CONST.HOLDINGS_LABEL);
   if (holdingsString && holdingsString.length > 0) {
-    processedHoldingsData = JSON.parse(holdingsString);
+    holdingsFileData = processedHoldingsData = JSON.parse(holdingsString);
     displayProcessedHoldingsData();
     holdingsFileMessageEelement.innerHTML = "Successfully loaded Holdings From Cache, if there is any descrepancy upload a new file and overwrite the records";
     holdingsFileMessageEelement.hidden = false;
     finalDownloadButtonEelement.hidden = false;
+    holdingsFileUploaded = true;
+  } else {
+    holdingsFileMessageEelement.innerHTML = "No Holding Records available or Uploaded. Now Application supports creation of Holdings from Trade Data. Just Upload Trade Data and process";
+    holdingsFileMessageEelement.hidden = false;
     holdingsFileUploaded = true;
   }
 
@@ -180,7 +183,37 @@ holdingsForm.addEventListener("submit", function (e) {
 
   reader.readAsText(input);
 });
-
+/**
+ * @param  {*} tradeRecord 
+ * Creates a new Holding record from Trade record if there is no Holding exists
+ * returns the HoldingRecord
+ */
+function createNewHoldingRecord(tradeRecord) {
+  if (tradeRecord && tradeRecord.symbol && tradeRecord.price && tradeRecord.quantity && tradeRecord.trade_type) {
+    const newHoldingRec = {};
+    newHoldingRec.Symbol = tradeRecord.symbol;
+    newHoldingRec.ISIN = tradeRecord.isin;
+    newHoldingRec.Sector = 'UnKnown';
+    newHoldingRec.alternateSymbol = tradeRecord.symbol;
+    if (tradeRecord.trade_type.toLowerCase() === "buy") {
+      var totalAmount = +(+tradeRecord.quantity * +tradeRecord.price);
+      var costAmount = +((totalAmount * 2 * 0.6) / 100);
+      const amountToRecover = ( totalAmount + costAmount).toFixed(2);
+      newHoldingRec.amount_to_recover = amountToRecover + "";
+      newHoldingRec['Quantity Available'] = (+tradeRecord.quantity) + "";
+      return newHoldingRec;
+    } else if (tradeRecord.trade_type.toLowerCase() === "sell") {
+      // throw Error
+      return null;
+    }
+  } else {
+    return null;
+  }
+}
+/**
+ * To Process the Trade Data and update Holdings with latest Quantity and Amount
+ * 
+ */
 function processData() {
 
   if (!tradeFileUploaded || !holdingsFileUploaded) {
@@ -201,10 +234,11 @@ function processData() {
   }
 
   if (newTradeDataRecords != null && newTradeDataRecords.length > 0) {
-    // console.log(JSON.stringify(holdingsMap));
+    // for each Trade Record, check existing Holdings and process
     newTradeDataRecords.forEach(element => {
       let holdingRec = holdingsMap[element.symbol];
       if (holdingRec != null && holdingRec != undefined) {
+        // Nothing should be done
       } else {
         holdingRec = holdingsMap[holdingsAltMap[element.symbol]];
       }
@@ -232,6 +266,15 @@ function processData() {
           holdingRec.amount_to_recover = amountToRecover + "";
         } else if (element.trade_type.toLowerCase() === "bonus") {
           holdingRec['Quantity Available'] = (+holdingRec['Quantity Available'] + +element.quantity) + "";
+        }
+        tradeDataCacheData.push(element);
+      } else {
+        // No Holding record for that SYMBOL, need to create new Holding Record
+        const newHoldingRec = createNewHoldingRecord(element);
+        if (newHoldingRec) {
+          holdingsMap[element.symbol] = newHoldingRec;
+          holdingsFileData.push(newHoldingRec);
+          tradeDataCacheData.push(element);
         }
       }
 
