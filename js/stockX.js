@@ -7,6 +7,8 @@ const holdingsFileMessageEelement = document.getElementById("holdingsFileUploadM
 const tradeDataFileUploadMessageEelement = document.getElementById("tradeDataFileUploadMessage");
 const processingFilesMessageElement = document.getElementById("processingFilesMessage");
 const finalDownloadButtonEelement = document.getElementById("finalDownloadButton");
+const totalHoldingsElement = document.getElementById("totalHoldings");
+const amountToDrawElement = document.getElementById("amountToDraw");
 
 const STORAGE_CONST = {
   HOLDINGS_LABEL: 'stockx_js_stock_holdings',
@@ -299,19 +301,26 @@ function displayProcessedHoldingsData() {
   html += "<th>" + "amount_to_recover" + "</th>";
   html += "<th>" + "Alt Symbol" + "</th>";
   html += "</tr>";
-
+  var countH = 0;
+  var amountToRecover = 0;
   processedHoldingsData.forEach(element => {
-    if (element != undefined && element != null && element != "")
+    if (element != undefined && element != null && element != "") {
       html += "<tr>";
-    html += "<td>" + element.Symbol + "</td>";
-    html += "<td>" + element.ISIN + "</td>";
-    html += "<td>" + element["Quantity Available"] + "</td>";
-    html += "<td>" + element.amount_to_recover + "</td>";
-    html += "<td>" + element.alternateSymbol + "</td>";
+      html += "<td>" + element.Symbol + "</td>";
+      html += "<td>" + element.ISIN + "</td>";
+      html += "<td>" + element["Quantity Available"] + "</td>";
+      html += "<td>" + element.amount_to_recover + "</td>";
+      html += "<td>" + element.alternateSymbol + "</td>";
 
-    html += "</tr>";
+      html += "</tr>";
+      countH = countH + 1;
+      amountToRecover = amountToRecover + +element.amount_to_recover;
+    }
+      
   });
   html += "</table>";
 
   displaySection.innerHTML = html;
+  totalHoldingsElement.innerHTML = totalHoldingsElement.innerHTML + "<b>" + countH + "</b>";
+  amountToDrawElement.innerHTML = amountToDrawElement.innerHTML + "<b>" + amountToRecover + "</b>";
 }
