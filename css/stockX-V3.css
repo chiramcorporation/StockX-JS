@@ -15,6 +15,7 @@
     margin-right: 10px;
     margin-left: 10px;
 }
+
 body {
     box-sizing: border-box;
     background: linear-gradient(to top, #f8dd99 70%, #F9E2A8 30%);
@@ -75,12 +76,9 @@ body {
 
 .left-section {
   float: left;
-  /* width: 10vh;
-  height: 100vh; */
 }
 
 .main-section {
-  /* float: right; */
   padding: 0.5rem 1rem;
 }
 
