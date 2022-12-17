@@ -18,7 +18,8 @@
 body {
     box-sizing: border-box;
     background: linear-gradient(to top, #f8dd99 70%, #F9E2A8 30%);
-    padding: 0 40px 40px 40px;
+    padding: 0;
+    margin: 0;
   }
   body::after {
     content: '';
@@ -27,14 +28,20 @@ body {
   }
 .success-message-box {
   border: 1px solid rgb(112 235 112);
-  min-width: 200px!important;
   width: auto;
   color: rgb(112 235 112);
-  position: absolute;
-  bottom: 0;
+  position: relative;
   padding: 0.1rem 0.5rem;
   font-size: 12px;
+  display: inline-block;
+  margin-top: 0.25rem;
 }
+
+[aria-hidden="false"][hidden] {
+  display: initial;
+}
+
+[hidden] { display: none !important; }
 
 .button {
   background-color: #4CAF50; /* Green */
@@ -78,20 +85,17 @@ body {
 }
 
 .content {
-  box-shadow: 0 0 40px rgb(0 0 0 / 15%);
-  background: white;
-  margin: 100px auto 0;
-  margin-right: 300px;
-  margin-left: 100px;
-  padding: 0.5rem 0.5rem 2rem;
+  /* background: white; */
+  margin:0 auto;
+  /* padding: 0.5rem 0.5rem; */
+  background: linear-gradient(to top, #f8dd99 70%, #F9E2A8 30%);
 }
 
 form {
   position: relative;
   margin: 0;
-  padding-bottom: 20px;
   padding-top: 0.25rem;
-  margin-bottom: 0.5rem;
+  min-height: 100px;
 }
 
 form > input {
@@ -113,4 +117,73 @@ p {
 p a {
   color: #008cba;
   padding: 0 0.25rem;
+}
+
+#displaySection {  
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.top-banner {
+  height: 100px;
+  margin-bottom: 0.5rem;
+  /* box-shadow: 0 0 40px rgb(0 0 0 / 15%); */
+  opacity:70%;
+}
+
+.left-banner {
+  width: 135px;
+  margin-right: 0.5rem;
+  /* box-shadow: 0 0 40px rgb(0 0 0 / 15%); */
+  opacity:70%;
+}
+
+.right-banner {
+  width: 325px;
+  margin-left: 0.5rem;
+  /* box-shadow: 0 0 40px rgb(0 0 0 / 15%); */
+  opacity:70%;
+}
+
+.main-content {
+  display: flex;
+}
+
+.container-fluid {
+  background: white;
+  width: calc(100% - 500px);
+  box-shadow: 0 0 40px rgb(0 0 0 / 15%);
+  padding: 0.5rem 0.5rem;
+}
+
+footer {
+  /* border: 1px solid #c5c5c5; */
+  margin-top: 0.5rem;
+  padding: 8px;
+  text-align: center;
+  /* box-shadow: 0 0 40px rgb(0 0 0 / 15%); */
+  opacity:70%;
+}
+
+@media only screen and (max-width: 1040px) {
+  .main-content {
+    display: block;
+  }
+  .container-fluid {
+    width: 100%;
+  }
+  .left-banner {
+    display: none;
+  }
+  .right-banner {
+    min-height: 100px;
+    height: auto;
+    margin: 0.5rem 0 0;
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 1040px) {
+
 }
