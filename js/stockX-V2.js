@@ -198,6 +198,7 @@ function handleHoldingsFileUpload(tempHoldingsFileData) {
     holdingsFileMessageEelement.hidden = false;
     holdingsFileUploaded = true;
     displayProcessedHoldingsData();
+    document.getElementById('saveAllHoldingsButton').hidden = false;
   } else if (processedHoldingsData.length > 0) {
     overWriteExistingRecs = confirm('Would you like to over write existing records, click OK to ignore existing records and overwrite from file. Cancel to keep existing and insert records from file');
     if (overWriteExistingRecs) {
@@ -206,6 +207,7 @@ function handleHoldingsFileUpload(tempHoldingsFileData) {
       holdingsFileMessageEelement.hidden = false;
       holdingsFileUploaded = true;
       displayProcessedHoldingsData();
+      document.getElementById('saveAllHoldingsButton').hidden = false;
     } else {
       holdingsFileMessageEelement.innerHTML = "Successfully Uploaded Holdings File, to process";
       holdingsFileMessageEelement.hidden = false;
@@ -314,6 +316,7 @@ function processData() {
     localStorage.setItem(STORAGE_CONST.TRADES_LABEL, JSON.stringify(tradeDataCacheData));
     displayProcessedHoldingsData();
     processingFilesMessageElement.innerHTML = "Successfully Processed Holdings and Trade Files";
+    document.getElementById('saveAllHoldingsButton').hidden = false;
     processingFilesMessageElement.hidden = false;
     finalDownloadButtonEelement.hidden = false;
     newTradeDataRecords = [];
@@ -321,35 +324,138 @@ function processData() {
 }
 
 function displayProcessedHoldingsData() {
-  var html = "<table border='1|1'>";
-  html += "<tr>";
-  html += "<th>" + "Symbol" + "</th>";
-  html += "<th>" + "ISIN" + "</th>";
-  html += "<th>" + "Quantity Available" + "</th>";
-  html += "<th>" + "amount_to_recover" + "</th>";
-  html += "<th>" + "Alt Symbol" + "</th>";
-  html += "</tr>";
-  var countH = 0;
-  var amountToRecover = 0;
-  processedHoldingsData.forEach(element => {
-    if (element != undefined && element != null && element != "") {
-      html += "<tr>";
-      html += "<td>" + element.Symbol + "</td>";
-      html += "<td>" + element.ISIN + "</td>";
-      html += "<td>" + element["Quantity Available"] + "</td>";
-      html += "<td>" + element.amount_to_recover + "</td>";
-      html += "<td>" + element.alternateSymbol + "</td>";
 
-      html += "</tr>";
-      countH = countH + 1;
-      amountToRecover = amountToRecover + +element.amount_to_recover;
-    }
-      
+  let html = `<button id="saveAllHoldingsButton" class="save-all-button" onclick="saveAllHoldingsToLocalStorage()" hidden>Save All</button>`;
+  html += "<table border='1|1'>";
+  html += "<thead><tr>";
+  html += "<th>Symbol</th>";
+  html += "<th>ISIN</th>";
+  html += "<th>Quantity Available</th>";
+  html += "<th>Amount to Recover</th>";
+  html += "<th>Alt Symbol</th>";
+  html += "<th>Actions</th>";
+  html += "</tr></thead><tbody>";
+
+  let countH = 0;
+  let amountToRecover = 0;
+
+  processedHoldingsData.sort((a, b) => {
+    if (!a || !a.Symbol) return 1;
+    if (!b || !b.Symbol) return -1;
+    return a.Symbol.localeCompare(b.Symbol);
   });
-  html += "</table>";
+
+  processedHoldingsData.forEach((element, index) => {
+    if (element != undefined && element != null && element != "") {
+
+      html += `<tr id="row-${index}">`;
+      html += `<td>${element.Symbol}</td>`;
+      html += `<td>${element.ISIN}</td>`;
+      html += `<td>${element["Quantity Available"]}</td>`;
+      html += `<td>${element.amount_to_recover}</td>`;
+      html += `<td>${element.alternateSymbol}</td>`;
+      html += `<td><button class="inline-edit-button" onclick="editRow(${index})">Edit</button></td>`;
+      html += "</tr>";
+
+      countH++;
+      amountToRecover += parseFloat(element.amount_to_recover) || 0;
+    }
+
+  });
+  html += "</tbody></table>";
 
   displaySection.innerHTML = html;
   totalHoldingsElement.innerHTML = "&nbsp &nbsp &nbsp <b>Total Holdings: </b>" + "<b>" + countH + "</b>";
   amountToDrawElement.innerHTML = "&nbsp &nbsp &nbsp <b>Amount Recoverable: </b>" + "<b>" + amountToRecover + "</b>";
   localStorage.setItem(STORAGE_CONST.HOLDINGS_LABEL, JSON.stringify(processedHoldingsData));
+}
+
+/**
+ * Puts a table row into edit mode.
+ * @param {number} index The index of the holding in processedHoldingsData.
+ */
+function editRow(index) {
+  document.getElementById('saveAllHoldingsButton').hidden = false;
+
+  const row = document.getElementById(`row-${index}`);
+  const holding = processedHoldingsData[index];
+
+  // Make cells editable. Symbol is the key and should not be edited.
+  row.cells[1].innerHTML = `<input type="text" id="isin-${index}" value="${holding.ISIN}">`;
+  row.cells[2].innerHTML = `<input type="number" step="any" id="qty-${index}" value="${holding['Quantity Available']}">`;
+  row.cells[3].innerHTML = `<input type="number" step="any" id="amount-${index}" value="${holding.amount_to_recover}">`;
+  row.cells[4].innerHTML = `<input type="text" id="altSymbol-${index}" value="${holding.alternateSymbol}">`;
+
+  // Change action buttons to Save/Cancel
+  row.cells[5].innerHTML = `<button class="save-all-button" onclick="saveRow(${index})">Save</button> <button class="cancel-button" onclick="cancelRow(${index})">Cancel</button>`;
+}
+
+/**
+ * Saves the changes from an edited row into the in-memory processedHoldingsData array.
+ * @param {number} index The index of the holding.
+ */
+function saveRow(index) {
+  const isinInput = document.getElementById(`isin-${index}`);
+  const qtyInput = document.getElementById(`qty-${index}`);
+  const amountInput = document.getElementById(`amount-${index}`);
+  const altSymbolInput = document.getElementById(`altSymbol-${index}`);
+
+  // Update the in-memory data array
+  processedHoldingsData[index].ISIN = isinInput.value;
+  processedHoldingsData[index]['Quantity Available'] = qtyInput.value;
+  processedHoldingsData[index].amount_to_recover = amountInput.value;
+  processedHoldingsData[index].alternateSymbol = altSymbolInput.value;
+
+  // Revert row to display mode
+  const row = document.getElementById(`row-${index}`);
+  row.cells[1].innerHTML = isinInput.value;
+  row.cells[2].innerHTML = qtyInput.value;
+  row.cells[3].innerHTML = amountInput.value;
+  row.cells[4].innerHTML = altSymbolInput.value;
+  row.cells[5].innerHTML = `<button onclick="editRow(${index})">Edit</button>`;
+
+  // Recalculate and display totals
+  recalculateTotals();
+}
+
+/**
+ * Cancels editing for a row and reverts it to display mode.
+ * @param {number} index The index of the holding.
+ */
+function cancelRow(index) {
+  const row = document.getElementById(`row-${index}`);
+  const holding = processedHoldingsData[index];
+
+  // Revert cells to display original data from the in-memory array
+  row.cells[1].innerHTML = holding.ISIN;
+  row.cells[2].innerHTML = holding['Quantity Available'];
+  row.cells[3].innerHTML = holding.amount_to_recover;
+  row.cells[4].innerHTML = holding.alternateSymbol;
+  row.cells[5].innerHTML = `<button onclick="editRow(${index})">Edit</button>`;
+}
+
+/**
+ * Saves the entire processedHoldingsData array to localStorage.
+ */
+function saveAllHoldingsToLocalStorage() {
+  localStorage.setItem(STORAGE_CONST.HOLDINGS_LABEL, JSON.stringify(processedHoldingsData));
+  alert('Holdings data saved successfully to browser storage!');
+  // Re-render the table to ensure a clean state (all rows read-only) and hide the save button.
+  displayProcessedHoldingsData();
+}
+
+/**
+ * Recalculates the total holdings count and recoverable amount and updates the display.
+ */
+function recalculateTotals() {
+  let countH = 0;
+  let amountToRecover = 0;
+  processedHoldingsData.forEach(element => {
+    if (element && element.amount_to_recover) {
+      countH++;
+      amountToRecover += parseFloat(element.amount_to_recover) || 0;
+    }
+  });
+  totalHoldingsElement.innerHTML = `&nbsp &nbsp &nbsp <b>Total Holdings: </b><b>${countH}</b>`;
+  amountToDrawElement.innerHTML = `&nbsp &nbsp &nbsp <b>Amount Recoverable: </b><b>${amountToRecover.toFixed(2)}</b>`;
 }
