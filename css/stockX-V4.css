@@ -63,6 +63,33 @@ body {
 .button4 {background-color: #e7e7e7; color: black;} /* Gray */ 
 .button5 {background-color: #555555;} /* Black */
 
+.save-all-button {
+  background-color: #008CBA;
+    color: white;
+    border: #008CBA;
+    border-radius: 3px;
+    box-shadow: -1px 1px 3px 0px rgb(100 100 100 / 50%);
+    padding: 5px 10px;
+}
+
+.inline-edit-button {
+  background-color: #c07c2e;
+    color: white;
+    border: #f8b705;
+    border-radius: 3px;
+    box-shadow: -1px 1px 3px 0px rgb(100 100 100 / 50%);
+    padding: 5px 10px;
+}
+
+.cancel-button {
+  background-color: #f44336;
+    color: white;
+    border: #f44336;
+    border-radius: 3px;
+    box-shadow: -1px 1px 3px 0px rgb(100 100 100 / 50%);
+    padding: 5px 10px;
+}
+
 .header-section {
   background: #cc6611;
   padding: 1rem 1.5rem;
