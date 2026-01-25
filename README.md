@@ -1,6 +1,6 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Copyright by @Chiram. All Rights Reserved.
 
 ### What is this repository for? ###
 
@@ -9,9 +9,8 @@ This README would normally document whatever steps are necessary to get your app
 
 ### How do I get set up? ###
 
-* Download and start using the app, no installation needed.
 * Simple HTML and JavaScript based tool. Just open the HTML file in any browser and use the tool
-* The output files will be written into files/output directory within the source directory
+* Accessible on URL https://stockx-js.chiramlimited.in/
 
 ### Contribution guidelines ###
 
@@ -20,5 +19,6 @@ This README would normally document whatever steps are necessary to get your app
 * Coding standatds maintained
 
 ### Who do I talk to? ###
+
 
 * Repo owner or admin
