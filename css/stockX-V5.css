@@ -1,0 +1,1149 @@
+/* ============================================================
+   Chiram Design System — StockX-JS Theme  (stockX-V5.css)
+   Dark Premium + Glassmorphism + Orange Brand
+   ============================================================ */
+
+/* ── 1. Google Fonts ──────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap');
+
+/* ── 2. Design Tokens ─────────────────────────────────────── */
+:root {
+  /* Brand */
+  --brand:         #cc6611;
+  --brand-light:   #e07830;
+  --brand-glow:    rgba(204, 102, 17, 0.35);
+
+  /* Backgrounds */
+  --bg-dark:       #0f0e0c;
+  --bg-card:       rgba(255, 255, 255, 0.05);
+  --bg-card-hover: rgba(255, 255, 255, 0.09);
+
+  /* Borders */
+  --border-glass:  rgba(255, 255, 255, 0.10);
+
+  /* Text */
+  --text-primary:   #f0ede8;
+  --text-secondary: #a89880;
+  --text-muted:     #6b5f52;
+
+  /* Shape */
+  --radius-card: 16px;
+  --radius-btn:  8px;
+
+  /* Effects */
+  --shadow-glow: 0 0 40px rgba(204, 102, 17, 0.15);
+  --transition:  0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Fonts */
+  --font-main:    'Inter', sans-serif;
+  --font-display: 'Outfit', sans-serif;
+}
+
+/* ── 3. Reset & Base ──────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+  background-color: var(--bg-dark);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(204,102,17,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(204,102,17,0.08) 0%, transparent 50%);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+body::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+/* ── 4. Scroll-Reveal ─────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── 5. Site Header ───────────────────────────────────────── */
+.header-section {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(15, 14, 12, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-glass);
+  padding: 0 2rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-section h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin: 0;
+  background: linear-gradient(135deg, #ffffff 0%, #e0cdb8 60%, var(--brand) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── 6. Layout ────────────────────────────────────────────── */
+.content {
+  margin: 0 auto;
+  max-width: 1400px;
+  padding: 0;
+}
+
+.main-content {
+  display: flex;
+  gap: 0;
+}
+
+/* Side banners (ads) */
+.top-banner {
+  height: 90px;
+  margin: 0.75rem 1rem;
+  border-radius: var(--radius-card);
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  opacity: 0.7;
+}
+
+.left-banner {
+  width: 135px;
+  min-width: 135px;
+  margin: 0.75rem 0.5rem;
+  border-radius: var(--radius-card);
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  opacity: 0.7;
+}
+
+.right-banner {
+  width: 280px;
+  min-width: 280px;
+  margin: 0.75rem 0.5rem;
+  border-radius: var(--radius-card);
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  opacity: 0.7;
+}
+
+.container-fluid {
+  flex: 1;
+  min-width: 0;
+  padding: 0.75rem;
+}
+
+/* ── 7. Sections ──────────────────────────────────────────── */
+.left-section {
+  float: left;
+}
+
+.main-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-card);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition);
+}
+
+.main-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--brand), transparent);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.main-section:hover::before {
+  opacity: 1;
+}
+
+.main-section:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(204, 102, 17, 0.3);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4), var(--shadow-glow);
+}
+
+/* ── 8. Section Labels ────────────────────────────────────── */
+.section-label {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brand);
+  margin-bottom: 1rem;
+}
+
+/* ── 8a. Header brand group ───────────────────────────────── */
+.header-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.header-tagline {
+  font-family: var(--font-main);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+/* ── 8b. Step-workflow layout ─────────────────────────────── */
+.upload-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1rem;
+  padding: 0.25rem 0;
+}
+
+.step-badge {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 12px var(--brand-glow);
+  margin-top: 0.1rem;
+}
+
+.step-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.step-body h3 {
+  margin-bottom: 0.2rem;
+}
+
+.step-hint {
+  margin: 0 0 0.65rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.step-hint a {
+  color: var(--brand-light);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.step-hint a:hover {
+  color: var(--brand);
+  text-decoration: underline;
+}
+
+.step-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-glass), transparent);
+  margin: 0.9rem 0 0.9rem 2.7rem;
+}
+
+/* ── 8c. Upload form row ──────────────────────────────────── */
+.upload-form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  min-height: auto;
+  padding-top: 0;
+}
+
+.upload-form > input {
+  display: inline-flex;
+  margin-bottom: 0;
+}
+
+/* Custom file label (shown on mobile/small, hides native) */
+.file-label {
+  display: none; /* decorative — native input handles pick; keep for potential future drag zone */
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-main);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.file-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* ── 8d. Results toolbar ──────────────────────────────────── */
+.results-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.results-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--font-main);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border-glass);
+  border-radius: 999px;
+  padding: 0.28rem 0.85rem;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.stat-pill b {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* When JS populates the values, the pill gets a subtle orange accent */
+.stat-pill:not(:empty):has(b) {
+  border-color: rgba(204,102,17,0.25);
+}
+
+/* ── 8e. Empty state placeholder ─────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--text-muted);
+}
+
+.empty-icon {
+  font-size: 2.8rem;
+  margin-bottom: 0.75rem;
+  opacity: 0.55;
+  line-height: 1;
+}
+
+.empty-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin: 0 0 0.35rem;
+}
+
+.empty-sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin: 0;
+  max-width: 36ch;
+  margin-inline: auto;
+}
+
+/* Once displaySection gets table content from JS, remove empty-state layout */
+#displaySection:not(.empty-state) {
+  padding: 0;
+  text-align: left;
+}
+
+/* ── 9. Typography ────────────────────────────────────────── */
+h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  margin: 0 0 0.5rem;
+}
+
+h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.35;
+  margin: 0 0 0.25rem;
+}
+
+p {
+  font-family: var(--font-main);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-weight: 400;
+  margin: 0.35rem 0;
+}
+
+p a {
+  color: var(--brand-light);
+  text-decoration: none;
+  padding: 0 0.15rem;
+  transition: color var(--transition);
+}
+
+p a:hover {
+  color: var(--brand);
+  text-decoration: underline;
+}
+
+b, strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* ── 10. Inline-link headings ─────────────────────────────── */
+.inline-link {
+  display: block;
+  color: var(--brand);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 0.25rem;
+}
+
+.inline-link p {
+  display: inline;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+.inline-tab-space {
+  display: inline-block;
+  margin: 0 8px;
+}
+
+/* ── 11. Forms ────────────────────────────────────────────── */
+form {
+  position: relative;
+  margin: 0;
+  padding-top: 0.5rem;
+  min-height: 80px;
+}
+
+form > input {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+input[type="file"] {
+  font-family: var(--font-main);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-btn);
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+input[type="file"]:hover {
+  border-color: var(--brand);
+  background: rgba(255,255,255,0.07);
+}
+
+input[type="file"]::file-selector-button {
+  font-family: var(--font-main);
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.3rem 0.75rem;
+  margin-right: 0.6rem;
+  cursor: pointer;
+  transition: opacity var(--transition);
+}
+
+input[type="file"]::file-selector-button:hover {
+  opacity: 0.85;
+}
+
+/* ── 12. Buttons ──────────────────────────────────────────── */
+.btn,
+.button,
+.button2,
+.button3,
+.button4,
+.button5,
+.save-all-button,
+.inline-edit-button,
+.cancel-button,
+input[type="submit"],
+input[type="button"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.25rem;
+  border-radius: var(--radius-btn);
+  font-family: var(--font-main);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--transition);
+  border: none;
+  white-space: nowrap;
+  outline: none;
+}
+
+/* Primary / submit (was button2 - blue) - brand orange */
+.button2,
+input[type="submit"] {
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(204,102,17,0.35);
+}
+.button2:hover,
+input[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(204,102,17,0.55);
+}
+
+/* Default button (was green) - outline ghost */
+.button {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-glass);
+}
+.button:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+/* Save-all - brand tint */
+.save-all-button {
+  background: rgba(204,102,17,0.15);
+  color: var(--brand-light);
+  border: 1px solid rgba(204,102,17,0.35);
+}
+.save-all-button:hover {
+  background: rgba(204,102,17,0.28);
+  border-color: var(--brand);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* Edit - warm amber */
+.inline-edit-button {
+  background: rgba(224,120,48,0.15);
+  color: var(--brand-light);
+  border: 1px solid rgba(224,120,48,0.3);
+  padding: 0.3rem 0.75rem;
+}
+.inline-edit-button:hover {
+  background: rgba(224,120,48,0.28);
+  color: #fff;
+  border-color: var(--brand-light);
+}
+
+/* Cancel - muted red */
+.cancel-button {
+  background: rgba(220, 53, 69, 0.12);
+  color: #ff6b7a;
+  border: 1px solid rgba(220,53,69,0.3);
+  padding: 0.3rem 0.75rem;
+}
+.cancel-button:hover {
+  background: rgba(220,53,69,0.25);
+  color: #fff;
+  border-color: #dc3545;
+}
+
+/* Unused legacy variants kept for JS compatibility */
+.button3 { background: rgba(220, 53, 69, 0.12); color: #ff6b7a; border: 1px solid rgba(220,53,69,0.3); }
+.button4 { background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border-glass); }
+.button5 { background: rgba(255,255,255,0.08); color: var(--text-secondary); border: 1px solid var(--border-glass); }
+
+/* Process button - primary orange */
+input[type="button"] {
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(204,102,17,0.35);
+}
+input[type="button"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(204,102,17,0.55);
+}
+
+/* ── 13. Message Box ──────────────────────────────────────── */
+.success-message-box {
+  display: inline-block;
+  border: 1px solid rgba(74, 222, 128, 0.4);
+  background: rgba(74, 222, 128, 0.07);
+  color: #4ade80;
+  border-radius: 6px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  margin-top: 0.35rem;
+}
+
+/* ── 14. Hidden / ARIA ────────────────────────────────────── */
+[aria-hidden="false"][hidden] { display: initial; }
+[hidden] { display: none !important; }
+
+/* ── 15. Stats / Totals Bar ───────────────────────────────── */
+#totalHoldings,
+#amountToDraw {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: var(--font-main);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  padding: 0.3rem 0.6rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-glass);
+  border-radius: 6px;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+#totalHoldings b,
+#amountToDraw b {
+  color: var(--brand-light);
+  font-size: 0.95rem;
+}
+
+/* ── 16. Data Table ───────────────────────────────────────── */
+#displaySection {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 0.75rem;
+  border-radius: var(--radius-card);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.25rem;
+  font-size: 0.83rem;
+  font-family: var(--font-main);
+}
+
+thead tr {
+  background: rgba(204,102,17,0.12);
+  border-bottom: 1px solid rgba(204,102,17,0.25);
+}
+
+thead th {
+  padding: 0.65rem 0.85rem;
+  text-align: left;
+  font-weight: 700;
+  color: var(--brand-light);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--border-glass);
+  transition: background var(--transition);
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background: rgba(255,255,255,0.04);
+}
+
+tbody td {
+  padding: 0.55rem 0.85rem;
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+tbody td:first-child {
+  font-weight: 600;
+  color: var(--brand-light);
+}
+
+/* Inline input cells in edit mode */
+tbody td input[type="text"],
+tbody td input[type="number"] {
+  font-family: var(--font-main);
+  font-size: 0.82rem;
+  background: rgba(255,255,255,0.06);
+  color: var(--text-primary);
+  border: 1px solid var(--border-glass);
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  width: 100%;
+  outline: none;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+tbody td input[type="text"]:focus,
+tbody td input[type="number"]:focus {
+  border-color: var(--brand);
+  background: rgba(204,102,17,0.06);
+}
+
+/* ── 17. Footer ───────────────────────────────────────────── */
+footer {
+  text-align: center;
+  padding: 1.25rem 1rem;
+  margin-top: 1rem;
+  font-family: var(--font-main);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-glass);
+  letter-spacing: 0.03em;
+}
+
+/* ── 18. Responsive ───────────────────────────────────────── */
+@media (max-width: 1040px) {
+  .main-content {
+    display: block;
+  }
+  .container-fluid {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+  }
+  .left-banner {
+    display: none;
+  }
+  .right-banner {
+    min-height: 80px;
+    height: auto;
+    width: calc(100% - 1rem);
+    margin: 0 0.5rem 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-section { padding: 0 1.25rem; }
+  .main-section   { padding: 1rem 1.25rem; }
+  .top-banner     { height: 70px; margin: 0.5rem 0.75rem; }
+
+  thead th, tbody td {
+    padding: 0.45rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* ── 19. Light Theme Overrides ────────────────────────────── */
+
+/* ── 19a. Token overrides ─────────────────────────────────── */
+[data-theme="light"] {
+  /* Page spaces: warm orange-cream tones */
+  --bg-dark:        #fdf6ee;          /* base page — pale orange-white */
+  --bg-card:        rgba(255, 244, 230, 0.80);   /* card — orange-tinted white */
+  --bg-card-hover:  rgba(255, 248, 238, 0.97);   /* card hover */
+
+  /* Borders */
+  --border-glass:   rgba(180, 100, 20, 0.15);    /* warm orange-tinted border */
+
+  /* Text: deep navy/black */
+  --text-primary:   #0d1b2a;          /* near-black with blue undertone */
+  --text-secondary: #1a3550;          /* deep navy */
+  --text-muted:     #4a6580;          /* muted blue-grey */
+
+  /* Glow stays orange */
+  --shadow-glow:    0 0 30px rgba(204, 102, 17, 0.12);
+}
+
+/* ── 19b. Body background ─────────────────────────────────── */
+[data-theme="light"] body {
+  background-color: #fdf6ee;
+  background-image:
+    radial-gradient(ellipse 90% 55% at 50% -5%,  rgba(224,130,40,0.14) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 40% at 85% 100%, rgba(204,102,17,0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 30% at 0%   60%, rgba(255,200,120,0.10) 0%, transparent 50%);
+}
+
+/* ── 19c. Header ──────────────────────────────────────────── */
+[data-theme="light"] .header-section {
+  background: rgba(253, 246, 238, 0.92);
+  border-bottom: 1px solid rgba(180,100,20,0.18);
+}
+
+/* ── 19d. Glass cards / sections ─────────────────────────── */
+[data-theme="light"] .main-section {
+  background: var(--bg-card);
+  border-color: var(--border-glass);
+  box-shadow: 0 2px 18px rgba(150,80,10,0.08);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+[data-theme="light"] .main-section:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(204,102,17,0.30);
+  box-shadow: 0 8px 30px rgba(150,80,10,0.12), var(--shadow-glow);
+}
+
+/* ── 19e. Typography overrides ────────────────────────────── */
+[data-theme="light"] h3,
+[data-theme="light"] .inline-link {
+  color: #0d1b2a;
+}
+
+[data-theme="light"] p {
+  color: #1a3550;
+}
+
+[data-theme="light"] b,
+[data-theme="light"] strong {
+  color: #0d1b2a;
+}
+
+/* ── 19f. Table ───────────────────────────────────────────── */
+/* Header row — navy blue strip */
+[data-theme="light"] thead tr {
+  background: #1a3550;
+  border-bottom: 2px solid #0d1b2a;
+}
+
+[data-theme="light"] thead th {
+  color: #ffffff;
+}
+
+/* Body rows */
+[data-theme="light"] tbody tr {
+  border-bottom: 1px solid rgba(180,100,20,0.12);
+}
+
+[data-theme="light"] tbody tr:nth-child(even) {
+  background: rgba(255,220,170,0.18);
+}
+
+[data-theme="light"] tbody tr:hover {
+  background: rgba(255,200,120,0.28);
+}
+
+[data-theme="light"] tbody td {
+  color: #0d1b2a;
+}
+
+/* Symbol column (first child) stays orange in light too */
+[data-theme="light"] tbody td:first-child {
+  color: #b35500;
+  font-weight: 700;
+}
+
+/* ── 19g. Totals / stats bar ──────────────────────────────── */
+[data-theme="light"] #totalHoldings,
+[data-theme="light"] #amountToDraw {
+  background: rgba(255,220,160,0.35);
+  border-color: rgba(180,100,20,0.20);
+  color: #0d1b2a;
+}
+
+[data-theme="light"] #totalHoldings b,
+[data-theme="light"] #amountToDraw b {
+  color: #b35500;
+}
+
+/* ── 19h. File inputs ─────────────────────────────────────── */
+[data-theme="light"] input[type="file"] {
+  background: rgba(255,235,195,0.45);
+  border-color: rgba(180,100,20,0.20);
+  color: #1a3550;
+}
+
+[data-theme="light"] input[type="file"]:hover {
+  background: rgba(255,220,160,0.60);
+  border-color: var(--brand);
+}
+
+/* ── 19i. Inline edit inputs ──────────────────────────────── */
+[data-theme="light"] tbody td input[type="text"],
+[data-theme="light"] tbody td input[type="number"] {
+  background: rgba(255,235,195,0.50);
+  color: #0d1b2a;
+  border-color: rgba(180,100,20,0.22);
+}
+
+[data-theme="light"] tbody td input[type="text"]:focus,
+[data-theme="light"] tbody td input[type="number"]:focus {
+  border-color: #1a3550;
+  background: rgba(255,220,160,0.55);
+}
+
+/* ── 19j. Buttons — all green in light mode ───────────────── */
+/* Primary submit / process */
+[data-theme="light"] .button2,
+[data-theme="light"] input[type="submit"],
+[data-theme="light"] input[type="button"] {
+  background: linear-gradient(135deg, #1e7e34 0%, #28a745 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(30,126,52,0.35);
+  border: none;
+}
+
+[data-theme="light"] .button2:hover,
+[data-theme="light"] input[type="submit"]:hover,
+[data-theme="light"] input[type="button"]:hover {
+  background: linear-gradient(135deg, #155724 0%, #1e7e34 100%);
+  box-shadow: 0 7px 24px rgba(30,126,52,0.50);
+  transform: translateY(-2px);
+}
+
+/* Download / ghost button */
+[data-theme="light"] .button {
+  background: transparent;
+  color: #1a3550;
+  border: 1px solid rgba(26,53,80,0.30);
+}
+
+[data-theme="light"] .button:hover {
+  background: rgba(26,53,80,0.07);
+  border-color: #1a3550;
+  color: #0d1b2a;
+}
+
+/* Save-all */
+[data-theme="light"] .save-all-button {
+  background: linear-gradient(135deg, #1e7e34 0%, #28a745 100%);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 3px 12px rgba(30,126,52,0.30);
+}
+
+[data-theme="light"] .save-all-button:hover {
+  background: linear-gradient(135deg, #155724 0%, #1e7e34 100%);
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(30,126,52,0.45);
+  transform: translateY(-1px);
+}
+
+/* Edit row */
+[data-theme="light"] .inline-edit-button {
+  background: linear-gradient(135deg, #1a6e2e 0%, #239b43 100%);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 2px 8px rgba(30,126,52,0.25);
+}
+
+[data-theme="light"] .inline-edit-button:hover {
+  background: linear-gradient(135deg, #155724 0%, #1e7e34 100%);
+  color: #ffffff;
+}
+
+/* Cancel stays red but slightly brightened */
+[data-theme="light"] .cancel-button {
+  background: rgba(220,53,69,0.10);
+  color: #b02030;
+  border: 1px solid rgba(176,32,48,0.30);
+}
+
+[data-theme="light"] .cancel-button:hover {
+  background: #dc3545;
+  color: #ffffff;
+  border-color: #dc3545;
+}
+
+/* ── 19k. Ad banner placeholders ─────────────────────────── */
+[data-theme="light"] .top-banner,
+[data-theme="light"] .left-banner,
+[data-theme="light"] .right-banner {
+  background: rgba(255,210,140,0.25);
+  border-color: rgba(180,100,20,0.12);
+}
+
+/* ── 19l. Footer ──────────────────────────────────────────── */
+[data-theme="light"] footer {
+  background: rgba(255,235,195,0.40);
+  border-top-color: rgba(180,100,20,0.15);
+  color: #4a6580;
+}
+
+/* ── 19m. Toggle track in light mode ─────────────────────── */
+[data-theme="light"] .theme-toggle__track {
+  background: rgba(180,100,20,0.12);
+  border-color: rgba(180,100,20,0.25);
+}
+
+/* Success message in light mode */
+[data-theme="light"] .success-message-box {
+  background: rgba(40,167,69,0.10);
+  border-color: rgba(40,167,69,0.40);
+  color: #155724;
+}
+
+/* ── 20. Theme Toggle Switch ──────────────────────────────── */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.theme-toggle__label {
+  font-family: var(--font-main);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  transition: color var(--transition);
+  white-space: nowrap;
+}
+
+/* The pill track */
+.theme-toggle__track {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid var(--border-glass);
+  border-radius: 999px;
+  transition: background var(--transition), border-color var(--transition);
+  flex-shrink: 0;
+}
+
+/* The sliding thumb */
+.theme-toggle__track::after {
+  content: '🌙';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  line-height: 18px;
+  text-align: center;
+  transition: transform var(--transition), background var(--transition);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.35);
+}
+
+/* Active (light) state */
+.theme-toggle.is-light .theme-toggle__track {
+  background: rgba(204,102,17,0.15);
+  border-color: rgba(204,102,17,0.3);
+}
+.theme-toggle.is-light .theme-toggle__track::after {
+  content: '☀️';
+  transform: translateX(20px);
+}
+.theme-toggle.is-light .theme-toggle__label {
+  color: var(--text-secondary);
+}
+
+/* Light-mode container adaptation */
+[data-theme="light"] .theme-toggle__track {
+  background: rgba(0,0,0,0.08);
+  border-color: rgba(0,0,0,0.15);
+}
+
+/* ── 21. Light theme — new component overrides ────────────── */
+[data-theme="light"] .step-divider {
+  background: linear-gradient(90deg, transparent, rgba(180,100,20,0.20), transparent);
+}
+
+[data-theme="light"] .step-hint {
+  color: #1a3550;
+}
+
+[data-theme="light"] .step-hint a {
+  color: #1a3550;
+  font-weight: 700;
+}
+
+[data-theme="light"] .header-tagline {
+  color: #4a6580;
+}
+
+[data-theme="light"] .stat-pill {
+  background: rgba(255,220,160,0.30);
+  border-color: rgba(180,100,20,0.18);
+  color: #1a3550;
+}
+
+[data-theme="light"] .stat-pill b {
+  color: #0d1b2a;
+}
+
+[data-theme="light"] .empty-state {
+  color: #4a6580;
+}
+
+[data-theme="light"] .empty-title {
+  color: #1a3550;
+}
+
+[data-theme="light"] .empty-sub {
+  color: #4a6580;
+}
+
+[data-theme="light"] .section-label {
+  color: var(--brand);
+}
+
+/* ── 22. Responsive — new components ─────────────────────── */
+@media (max-width: 600px) {
+  .results-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .upload-step {
+    gap: 0.75rem;
+  }
+
+  .step-badge {
+    width: 26px;
+    height: 26px;
+    font-size: 0.78rem;
+  }
+
+  .header-tagline {
+    display: none;
+  }
+}
