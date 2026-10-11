@@ -2,14 +2,30 @@
 <html lang="en">
 
 <head>
-  <title>StockX-JS</title>
+  <title>StockX-JS — Holdings & Trade Tracker</title>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+    content="StockX-JS — Upload, process and track your stock holdings and trade data with ease.">
+  <meta name="theme-color" content="#0f0e0c">
   <meta name="google-adsense-account" content="ca-pub-3738372941386015">
   <link rel="shortcut icon" type="image/x-icon" href="favicon.png" />
+  <!-- Google Fonts: Inter + Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap"
+    rel="stylesheet">
+  <!-- Theme init: apply saved preference before render to avoid flash -->
+  <script>
+    (function () {
+      var saved = localStorage.getItem('stockx-theme');
+      if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    })();
+  </script>
   <script src="js/loader.js"></script>
 </head>
 
@@ -22,70 +38,164 @@
         <div class="row">
           <div class="col-12">
             <section id="headerSection" class="header-section">
-              <h1>Chiram</h1>
+              <div class="header-brand">
+                <h1>Chiram</h1>
+                <span class="header-tagline">Holdings &amp; Trade Tracker</span>
+              </div>
+              <!-- Theme Toggle -->
+              <button id="themeToggle" class="theme-toggle" aria-label="Toggle light/dark theme" title="Switch theme">
+                <span class="theme-toggle__label">DARK</span>
+                <span class="theme-toggle__track"></span>
+              </button>
             </section>
-            <section id="leftSection" class="left-section"></section>
+            <section id="leftSection" class="left-section reveal"></section>
           </div>
+
+          <!-- ── Upload Panel ───────────────────────────────── -->
           <div class="col-12">
-            <section id="mainSection" class="main-section">
-              <!-- Holdings File/Data Section -->
-              <h3 class="inline-link">
-                Choose a file to upload the Holdings data CSV.
-                <p>
-                  <a href="javascript:downloadHoldingsTemplate()">Download </a>
-                  the Sample Template for Holdings
-                </p>
-              </h3>
-              <span class="inline-tab-space"></span>
-              <form id="holdingsForm">
-                <input type="file" id="holdingsUploadFile" accept=".csv" />
-                <input type="submit" value="Submit" class="button button2" />
-                <div id="holdingsFileUploadMessage" class="success-message-box" hidden></div>
-              </form>
-              <!-- Trade File/Data Section -->
-              <h3 class="inline-link">
-                Choose a file to upload the expense/trade data CSV.
-                <p style="margin: 0.25rem 0;">
-                  <a href="javascript:downloadTradeTemplate()">Download </a>
-                  the Sample Template for Trade Data
-                </p>
-              </h3>
-              <span class="inline-tab-space"></span>
-              <form id="myForm">
-                <input type="file" id="csvFile" accept=".csv" />
-                <input type="submit" value="Submit" class="button button2" />
-                <div id="tradeDataFileUploadMessage" class="success-message-box" hidden></div>
-              </form>
-              <form>
-                <h3 class="inline-link">Click the below button to process TradeData and generate new Holdings</h3>
-                <p style="margin: 0.25rem 0;">Make sure that you have uploaded the Holdings data and Trade data first
-                  and then click the below
-                  button.
-                  Make sure to not process same Trade Data twice which could lead to invalid Holdings.</p>
-                <input type="button" value="Process" class="button button2" onclick="processData();" />
-                <div id="processingFilesMessage" class="success-message-box" hidden></div>
-              </form>
+            <section id="mainSection" class="main-section reveal">
+              <span class="section-label">&#9654; Data Upload</span>
+
+              <!-- Step 1: Holdings -->
+              <div class="upload-step">
+                <div class="step-badge">1</div>
+                <div class="step-body">
+                  <h3>Upload Holdings CSV</h3>
+                  <p class="step-hint">Your current portfolio snapshot. <a
+                      href="javascript:downloadHoldingsTemplate()">Download sample template &rarr;</a></p>
+                  <form id="holdingsForm" class="upload-form">
+                    <label class="file-label" for="holdingsUploadFile">
+                      <span class="file-icon">&#128190;</span>
+                      <span class="file-text">Choose file&hellip;</span>
+                    </label>
+                    <input type="file" id="holdingsUploadFile" accept=".csv" />
+                    <input type="submit" value="Upload Holdings" class="button button2" />
+                    <div id="holdingsFileUploadMessage" class="success-message-box" hidden></div>
+                  </form>
+                </div>
+              </div>
+
+              <div class="step-divider"></div>
+
+              <!-- Step 2: Trade Data -->
+              <div class="upload-step">
+                <div class="step-badge">2</div>
+                <div class="step-body">
+                  <h3>Upload Trade Data CSV</h3>
+                  <p class="step-hint">Brokerage export with buy/sell/dividend/bonus rows. <a
+                      href="javascript:downloadTradeTemplate()">Download sample template &rarr;</a></p>
+                  <form id="myForm" class="upload-form">
+                    <label class="file-label" for="csvFile">
+                      <span class="file-icon">&#128196;</span>
+                      <span class="file-text">Choose file&hellip;</span>
+                    </label>
+                    <input type="file" id="csvFile" accept=".csv" />
+                    <input type="submit" value="Upload Trade Data" class="button button2" />
+                    <div id="tradeDataFileUploadMessage" class="success-message-box" hidden></div>
+                  </form>
+                </div>
+              </div>
+
+              <div class="step-divider"></div>
+
+              <!-- Step 3: Process -->
+              <div class="upload-step">
+                <div class="step-badge">3</div>
+                <div class="step-body">
+                  <h3>Process &amp; Generate Holdings</h3>
+                  <p class="step-hint">Applies trade records onto your holdings to compute updated quantities and
+                    recovery amounts. Do <strong>not</strong> submit the same trade file twice.</p>
+                  <form class="upload-form">
+                    <input type="button" value="&#9654;&nbsp; Process Now" class="button button2 btn-process"
+                      onclick="processData();" />
+                    <div id="processingFilesMessage" class="success-message-box" hidden></div>
+                  </form>
+                </div>
+              </div>
             </section>
           </div>
 
-          <!-- <div style="clear:both"></div> -->
-          <!-- Final Display Section -->
+          <!-- ── Results Panel ──────────────────────────────── -->
           <div class="col-12">
-            <section class="main-section">
-              <h3 class="inline-link">Final Holdings after processing:</h3>
-              <input id="finalDownloadButton" type="button" value="Download" class="button"
-                onclick="downloadFinalData();" hidden />
-              <span id="totalHoldings">&nbsp &nbsp &nbsp <b>Total Holdings: </b></span>
-              <span id="amountToDraw">&nbsp &nbsp &nbsp <b>Amount Recoverable: </b></span>
-              <div id="displaySection">No Records to Display</div>
+            <section class="main-section reveal" style="animation-delay:0.15s">
+              <span class="section-label">&#9654; Holdings Summary</span>
+
+              <div class="results-toolbar">
+                <div class="results-stats">
+                  <span id="totalHoldings" class="stat-pill"><b>Total Holdings:</b>&nbsp;—</span>
+                  <span id="amountToDraw" class="stat-pill"><b>Amount Recoverable:</b>&nbsp;—</span>
+                </div>
+                <input id="finalDownloadButton" type="button" value="&#11015;&nbsp; Download CSV" class="button"
+                  onclick="downloadFinalData();" hidden />
+              </div>
+
+              <div id="displaySection" class="empty-state">
+                <div class="empty-icon">&#128202;</div>
+                <p class="empty-title">No holdings to display</p>
+                <p class="empty-sub">Upload your Holdings and Trade CSV files above, then click <strong>Process
+                    Now</strong>.</p>
+              </div>
             </section>
           </div>
+
         </div>
       </div>
       <div class="right-banner"></div>
     </div>
-    <footer>Copyright by @Chiram. All Rights Reserved.</footer>
+
+    <footer>
+      <span>Copyright &copy; 2024 - 2027 Chiram Limited &mdash; All Rights Reserved.</span>
+    </footer>
   </div>
+
+  <!-- Scroll-Reveal Observer (THEME.md §10) -->
+  <script>
+    (function () {
+      var revealObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach(function (el) {
+        revealObserver.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Theme Toggle Logic -->
+  <script>
+    (function () {
+      var btn = document.getElementById('themeToggle');
+      var label = btn.querySelector('.theme-toggle__label');
+      var root = document.documentElement;
+
+      function applyTheme(theme) {
+        if (theme === 'light') {
+          root.setAttribute('data-theme', 'light');
+          btn.classList.add('is-light');
+          label.textContent = 'LIGHT';
+        } else {
+          root.removeAttribute('data-theme');
+          btn.classList.remove('is-light');
+          label.textContent = 'DARK';
+        }
+      }
+
+      // Sync toggle state with any saved preference on load
+      var saved = localStorage.getItem('stockx-theme') || 'dark';
+      applyTheme(saved);
+
+      btn.addEventListener('click', function () {
+        var current = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = current === 'light' ? 'dark' : 'light';
+        localStorage.setItem('stockx-theme', next);
+        applyTheme(next);
+      });
+    })();
+  </script>
 </body>
 
 </html>
